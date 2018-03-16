@@ -1,0 +1,21 @@
+<div>
+    <div class="content">
+        <p>Appreciate your participation. Have a good day. :)</p>
+        <p>Result will start download soon....</p>
+    </div>
+</div>
+
+<script type="text/javascript">
+    let csv = globalStack
+      .reduce((csv, v) => {
+        return csv.concat(`${v.type},${v.rawData[0]},${v.rawData[1]},${v.rightAnswer},${v.userAnswer}\n`)
+      }, 'Vis,rawData1,rawData2,TruePercent,ReportedPercent\n')
+
+
+    let encodedURI = encodeURI('data:text/csv;charset=utf-8,'.concat(csv));
+    let link = document.createElement("a");
+    link.setAttribute("href", encodedURI);
+    link.setAttribute("download", "result.csv");
+    document.body.appendChild(link); // Required for FF
+    link.click();
+</script>

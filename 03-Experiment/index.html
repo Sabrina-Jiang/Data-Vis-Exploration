@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<head>
+    <title>Experiment</title>
+
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://d3js.org/d3.v3.min.js"></script>
+    <script type="text/javascript">
+      function shuffle (array) {
+        let currentIndex = array.length, temporaryValue, randomIndex
+
+        // While there remain elements to shuffle...
+        while (0 !== currentIndex) {
+
+          // Pick a remaining element...
+          randomIndex = Math.floor(Math.random() * currentIndex)
+          currentIndex -= 1
+
+          // And swap it with the current element.
+          temporaryValue = array[currentIndex]
+          array[currentIndex] = array[randomIndex]
+          array[randomIndex] = temporaryValue
+        }
+
+        return array
+      }
+
+
+      let orderList = []
+      const itemSize = 20
+      for (let i = 0; i < itemSize; i++) orderList.push(0)
+      for (let i = 0; i < itemSize; i++) orderList.push(1)
+      for (let i = 0; i < itemSize; i++) orderList.push(2)
+      orderList = shuffle(orderList)
+
+      const globalStack = []
+      let pointer = -2
+
+      function loadNextPage () {
+        console.log(globalStack)
+        let target = pointer > -1 ? orderList[pointer] : pointer
+        target = pointer >= (itemSize * 3) ? 'final' : target
+        $.get(`pages/${target}.html`)
+          .done(data => {
+            $('.container').html(data)
+          })
+        pointer += 1
+        console.log(pointer)
+      }
+    </script>
+</head>
+<body>
+<div class="container"></div>
+
+
+<script type="text/javascript">
+  loadNextPage()
+</script>
+
+</body>
+</html>

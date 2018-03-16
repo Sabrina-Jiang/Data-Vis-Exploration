@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title> Test for vis </title>
+    <script src="http://d3js.org/d3.v3.js"> </script>
+    <style>
+        body {
+            font: 11px sans-serif;
+        }
+        .axis path,
+        .axis line {
+            fill: none;
+            stroke: #000;
+            shape-rendering: crispEdges;
+        }
+        .dot {
+            stroke: #000;
+        }
+        .tooltip {
+            position: absolute;
+            width: 200px;
+            height: 28px;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+<script>
+  function plot(rows){
+    var margin = {top: 20, right: 20, bottom: 30, left: 40},
+      width = 700 - margin.left - margin.right,
+      height = 500 - margin.top - margin.bottom;
+
+// setup x
+    var xValue = function(d) { return d.Weight}, // data -> value
+      xMax = d3.max(rows, xValue),
+      xMin = d3.min(rows, xValue),
+      xScale = d3.scale.linear()
+        .domain([xMin-200, xMax+200]).range([0, width]), // value -> display //
+      xMap = function(d) { return xScale(xValue(d))} // data -> display
+    xAxis = d3.svg.axis()
+      .scale(xScale)
+      .tickValues([2000, 3000, 4000, 5000])
+      .orient("bottom");
+    // setup y
+    var yValue = function(d) { return d.MPG}, // data -> value
+      yMax = d3.max(rows, yValue),
+      yMin = d3.min(rows, yValue),
+      yScale = d3.scale.linear()
+        .domain([yMin-5, yMax+5]).range([height, 0]), // value -> display //
+      yMap = function(d) { return yScale(yValue(d))} // data -> display
+    yAxis = d3.svg.axis()
+      .scale(yScale)
+      .tickValues([10, 20, 30, 40])
+      .orient("left");
+    // setup fill color
+    var cValue = function(d) { return d.Manufacturer;},
+      color = d3.scale.category10()
+    var colorMap = function(d){return color(cValue(d))};
+    // setup bubble size
+    var size = function(d){return d.Weight/380};
+    // add the canvas
+    var svg = d3.select("body").append("svg")
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
+      .append("g")
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    // add the tooltip area to the webpage
+    var tooltip = d3.select("body").append("div")
+      .attr("class", "tooltip")
+      .style("opacity", 0);
+
+    // x-axis
+    svg.append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + height + ")")
+      .call(xAxis)
+      .append("text")
+      .attr("class", "label")
+      .attr("x", width/2)
+      .attr("y", 26)
+      .style("text-anchor", "middle")
+      .text("Weight");
+    // y-axis
+    svg.append("g")
+      .attr("class", "y axis")
+      .call(yAxis)
+      .append("text")
+      .attr("class", "label")
+      .attr("transform", "rotate(-90)")
+      .attr("x", -height/2)
+      .attr("y", 0)
+      .attr("dy", "-2em")
+      .style("text-anchor", "middle")
+      .text("MPG");
+
+    // draw bubbles
+    svg.selectAll("circle").data(rows)
+      .enter().append("circle")
+      .attr("r", size)
+      .attr("cx", xMap)
+      .attr("cy", yMap)
+      .style("fill", colorMap)
+      .style("fill-opacity", 0.5);
+
+    // draw legend
+    var legend = svg.selectAll(".legend").data(color.domain()).enter()
+      .append("g")
+      .attr("class", "legend")
+      .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
+
+    // draw legend colored circles
+    legend.append("circle")
+      .attr("cy",10)
+      .attr("cx",630)
+      .attr("r", "0.4em")
+      .style("fill", color);
+
+    // draw legend text
+    legend.append("text")
+      .attr("x", width - 24)
+      .attr("y", 9)
+      .attr("dy", ".35em")
+      .style("text-anchor", "end")
+      .text(function(d) { return d;});
+  }
+  // load data
+  d3.csv("cars-sample.csv", function(error, data) {
+    if(error){
+      console.log(error);
+    }
+    //remove the NaN data
+    data = data.filter(function (d) {
+      if(isNaN(d.MPG)){
+        return false;
+      }
+        d.Weight = +d.Weight;
+        d.MPG = +d.MPG;
+        d.Manufacturer = d.Manufacturer;
+      return true;
+    })
+    plot(data);
+  });
+</script>
+</body>
+</html>

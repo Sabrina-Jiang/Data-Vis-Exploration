@@ -1,0 +1,113 @@
+body, html {
+    margin: 0;
+    border: 0;
+    padding: 0;
+    background-color: #FEFEFE;
+}
+
+#title {
+    width: 100vw;
+    height: 10vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 40px;
+    font-weight: 800;
+}
+
+.chart_title{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 25px;
+}
+
+.chart_title1{
+    /*display: flex;*/
+    /*justify-content: center;*/
+    align-items: center;
+    font-size: 25px;
+}
+
+.flex-container {
+    /*display: flex;*/
+}
+
+.data-view {
+    width: 40vw;
+}
+
+#usa-map {
+    width: 50%;
+    /*height: 40vw;*/
+    /*position: relative;*/
+    border-top: 1px solid #EEEEEE;
+    float: left;
+}
+
+#bar-chart {
+    width: 40%;
+    float: left;
+}
+
+#donut-chart {
+    width: 50%;
+    margin-left: 25%;
+    margin-top: 25%;
+}
+
+/* On mouse hover, lighten state color */
+path:hover {
+    fill-opacity: 0.7;
+}
+
+/* Style for Custom Tooltip */
+div.tooltip {
+    /*width: 120px;*/
+    height: 30px;
+    padding: 5px 10px;
+    position: absolute;
+
+    background: white;
+
+    text-align: center;
+
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    line-height: 30px;
+
+    border: 1px solid #EEEEEE;
+
+    pointer-events: none;
+}
+
+
+/* Legend Position Style */
+.legend {
+    position: absolute;
+    left: 800px;
+    top: 350px;
+}
+
+.bar {
+    fill: steelblue;
+}
+
+.bar:hover {
+    fill: brown;
+}
+
+.bar-axis-x path {
+    display: none;
+}
+
+path.slice{
+    stroke-width:2px;
+}
+
+polyline{
+    opacity: .3;
+    stroke: black;
+    stroke-width: 2px;
+    fill: none;
+}
+

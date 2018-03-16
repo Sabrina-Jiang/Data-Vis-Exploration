@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MultiView</title>
+
+    <link rel="stylesheet" href="css/master.css">
+    <script src="https://cdn.bootcss.com/d3/3.5.17/d3.min.js"></script>
+
+    <script>
+      /**
+       * Global variables
+       */
+      let database, util = {}
+    </script>
+</head>
+<body>
+<div id="title">Leading Causes of Death in the USA</div>
+<div class="flex-container">
+    <div id="usa-map">
+        <div class="chart_title">Death in Different State</div>
+    </div>
+    <div id="bar-chart">
+        <div class="chart_title">Death in Different Year</div>
+        <svg width="960" height="500"></svg>
+    </div>
+    <!--<div class="data-view"></div>-->
+</div>
+
+<div class="flex-container">
+
+    <div id="donut-chart">
+        <div class="chart_title1">Leading Causes of Death</div>
+    </div>
+</div>
+
+</body>
+
+<script src="js/util.js"></script>
+<script src="js/init.js"></script>
+<script src="js/mapService.js"></script>
+<script src="js/barService.js"></script>
+<script src="js/donutService.js"></script>
+<script src="js/IPC.js"></script>
+
+<script>
+  /**
+   * Triggered after global initialization.
+   */
+  function viewDidLoad () {
+    // console.log(util.dbHelper({}))
+    IPCMain.init()
+  }
+</script>
+
+</html>

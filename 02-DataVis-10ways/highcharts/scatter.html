@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>test</title>
+    <script src="https://img.hcharts.cn/jquery/jquery-1.8.3.min.js"></script>
+    <script src="http://cdn.hcharts.cn/highcharts/highcharts.js"></script>
+    <script src="http://cdn.hcharts.cn/highcharts/highcharts-more.js"></script>
+</head>
+<body style="margin: 0; border: 0">
+<div id="container" style="width: 100vw; height: 100vh"></div>
+</body>
+<script type="text/javascript">
+  $.ajax('/cars-sample.csv')
+    .done(data => {
+      const manufacturer = ['bmw', 'ford', 'honda', 'mercedes', 'toyota']
+      const colors = ['#EAB6B2', '#B6B45C', '#A2D5BC', '#9CD1F0', '#E19DEA']
+
+//       Modern JavaScript Data Process
+//       ===============================
+//       const chartData = data
+//         .replace(/NA/g, 0) // Replace NA
+//         .split('\n')
+//         .map(line => line.split(','))
+//         .filter(line => line.length === 11)
+//         .map(line => line.map(col => JSON.parse(col)))
+//         .filter(item => manufacturer.indexOf(item[2]) > -1)
+//         .reduce((result, item) => {
+//           let index = manufacturer.indexOf(item[2])
+//           let value = [[item[7], item[3], item[7]]]
+//           result[index] = result[index].concat(value)
+//           return result
+//         }, [[], [], [], [], []])
+//         .map((item, index) => {
+//           return {
+//             name: manufacturer[index],
+//             data: item,
+//             color: colors[index]
+//           }
+//         })
+
+      // Classical JavaScript Data Process
+      // ==================================
+      data = data.replace(/NA/g, 0)   // filter the NaN data, use re to replace it
+      var lines = data.split('\n')
+      for (var i = 0; i < lines.length; i++) {
+        lines[i] = lines[i].split(',')
+      }
+      lines.shift()
+      lines.pop()
+
+      // JSON.parse
+      for (var i = 0; i < lines.length; i++) {
+        for (var j = 0; j < lines[i].length; j++) {
+          lines[i][j] = JSON.parse(lines[i][j])
+        }
+      }
+
+      var chartData = [[], [], [], [], []]
+      for (var i = 0; i < lines.length; i++) {
+        let index = manufacturer.indexOf(lines[i][2])
+        chartData[index].push([lines[i][7], lines[i][3], lines[i][7]])
+      }
+
+      for (var i = 0; i < chartData.length; i++) {
+        // the same index of manufacturer, colors, chartData to build the relationship
+        chartData[i] = {
+          name: manufacturer[i],
+          data: chartData[i],
+          color: colors[i]
+        }
+      }
+
+      console.log(chartData)
+
+      // Building Chart
+      // ===============================
+      $('#container').highcharts({
+        chart: {
+          type: 'bubble',
+          zoomType: 'xy',
+          plotBackgroundColor: '#EBEBEB',
+        },
+        title: {
+          text: ''
+        },
+        xAxis: {
+          title: {
+            enabled: true,
+            text: 'Weight'
+          },
+          showFirstLabel: true,
+          showLastLabel: true,
+          min: 1500,
+          max: 5500,
+          tickInterval: 1000,
+          gridLineWidth: 2,
+          gridLineColor: '#FFFFFF'
+        },
+        yAxis: {
+          title: {
+            text: 'MPG'
+          },
+          showFirstLabel: true,
+          showLastLabel: false,
+          min: 10,
+          max: 50,
+          tickInterval: 10,
+          gridLineWidth: 2,
+          gridLineColor: '#FFFFFF'
+        },
+        plotOptions: {
+          bubble: {
+            maxSize: '4%',
+            minSize: '1%'
+          }
+        },
+        series: chartData
+      })
+    })
+</script>
+
+</html>

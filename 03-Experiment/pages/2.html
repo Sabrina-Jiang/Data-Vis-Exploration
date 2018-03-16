@@ -1,0 +1,125 @@
+
+<div>
+    <div id = "progressBar">
+        <p id = "progressNum"></p>
+    </div>
+
+    <div class="content">
+        <p>Two values are marked with dots.</p>
+        <p>What do you think the percent of the smaller value to the larger value?</p>
+        <p>Please put your answer below.</p>
+        <p>e.g. If you think the small one is exactly a half of the bigger one,</p>
+        <p>please input "50".</p>
+        <div class="actions">
+            <input type="text" class="value-input">
+            <input type="button" class="next-btn" value="next">
+        </div>
+
+    </div>
+</div>
+
+<script type="text/javascript">
+  (function () {
+    const N = 10
+
+    let data = []
+    let width = 300,
+      height = 300
+
+
+    // draw the square that shows how many trials you have taken
+    function progress(trials){
+      var progress_width = 600;
+      //add a progress bar
+      var baseLine = d3.select("#progressBar").append("svg:svg")
+        .attr("width", progress_width)
+        .attr("height", 20)
+
+      var backRect = baseLine.append("svg:rect")
+        .attr("x", 50)
+        .attr("y", 0)
+        .attr("width", 600)
+        .attr("height", 10)
+        .style("fill", "none" )
+        .style("stroke", "grey")
+        .style("stroke-width", "1");
+
+      // draw the square that shows how many trials you have taken
+      var rect = baseLine.append("svg:rect")
+        .attr("x", 50)
+        .attr("y", 0)
+        .attr("width", 10*(trials))
+        .attr("height", 10)
+        .style("stroke", "#f4511e")
+        .style("fill", "#f4511e");
+    };
+
+    progress(pointer)
+    document.getElementById("progressNum").innerHTML= pointer+"/60"
+
+    //for loop for generating random values b/w 0 and 100
+    for (let i = 0; i < 10; i++) data.push(Math.floor(Math.random() * 90) + 10)
+
+    treeData = {
+      name: 'tree',
+      children: data.map(v => {return {name: '', size: v}})
+    }
+
+    let treemap = d3.layout
+      .treemap()
+      .size([width, height])
+      .sticky(true)
+      .value((d) => d.size)
+
+    let chart = d3.select('.content')
+      .append('svg')
+      .attr('id', 'treemap')
+      .style('position', 'relative')
+      .data(d3.entries(treeData))
+      .attr('width', width)
+      .attr('height', height)
+    treemap.nodes(treeData)
+
+    let cell = chart.selectAll('g')
+      .data(treemap)
+      .enter()
+      .append('g')
+      .attr('class', 'cell')
+      .attr('transform', (d) => 'translate(' + d.x + ',' + d.y + ')')
+      .attr('data-raw', (d) => d.size)
+
+    cell.append('rect')
+      .attr('width', (d) => d.dx)
+      .attr('height', (d) => d.dy)
+      .attr('stroke', 'black')
+      .attr('fill', 'white')
+
+    let pattern = []
+    for (let i = 0; i < N - 2; i++) pattern.push(0)
+    pattern.push(Math.ceil(Math.random()))
+    pattern.push(Math.ceil(Math.random()))
+    pattern = [0].concat(shuffle(pattern))
+
+    //adding tow point on the tree map
+    cell.append('circle')
+      .attr('fill', 'black')
+      .attr('r', 3)
+      .attr('transform', (d) => `translate(${d.dx / 2}, ${d.dy / 2})`)
+      .data(pattern)
+      .attr('display', (d, i) => !!pattern[i] ? '' : 'none')
+
+    let rawData = data
+      .filter((v, i) => !!pattern[i + 1])
+      .map((i) => i - 10)
+
+    let rightAnswer = parseInt(Math.min(...rawData) / Math.max(...rawData) * 100)
+    let payload = {type: 'TreeMap', rawData, rightAnswer}
+
+
+    $('.next-btn').click(() => {
+      payload.userAnswer = $('.value-input').val()
+      globalStack.push(payload)
+      loadNextPage()
+    })
+  })()
+</script>

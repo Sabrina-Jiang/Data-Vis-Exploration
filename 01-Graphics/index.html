@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Test for data vis</title>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+</head>
+
+<body>
+
+<script>
+  var w = 1920;
+  var h = 1080;
+
+  var svg = d3.select("body")
+    .append("svg")
+    .attr("width", w)
+    .attr("height", h);
+
+
+  //The box behind the tree
+  //up
+  svg.append("polygon")
+    .attr("points", "260,320 290,350 320,320")
+    .attr("fill", "rgb(195,239,226)")
+    .attr("stroke")
+  //left
+  svg.append("polygon")
+    .attr("points", "260,320 260,380 290,350")
+    .attr("fill", "rgb(175,233,223)")
+  //below
+  svg.append("polygon")
+    .attr("points", "260,380 290,350 320,380")
+    .attr("fill", "rgb(145,222,220)")
+  //right
+  svg.append("polygon")
+    .attr("points", "320,320 290,350 320,380")
+    .attr("fill", "rgb(175,233,223)")
+
+
+  svg.append("polygon")
+    .attr("points", "263,340 270,340 263,335")
+    .attr("fill", "rgb(114,51,85)")
+    .attr("stroke")
+
+  svg.append("polygon")
+    .attr("points", "270,340 277,340 277,335")
+    .attr("fill", "rgb(114,51,85)")
+    .attr("stroke")
+
+  //four tri
+
+  svg.append("polygon")
+    .attr("points", "250,340 250,380 270,360")
+    .attr("fill", "rgb(107,193,250)")
+    .attr("stroke")
+
+  svg.append("polygon")
+    .attr("points", "250,340 270,360 290,340")
+    .attr("fill", "rgb(136,207,250)")
+
+  svg.append("polygon")
+    .attr("points", "250,380 270,360 290,380")
+    .attr("fill", "rgb(77,169,248)")
+
+  svg.append("polygon")
+    .attr("points", "270,360 290,380 290,340")
+    .attr("fill", "rgb(108,193,250)")
+
+  var line = svg.append("line")
+    .attr("x1", 250)
+    .attr("y1", 340)
+    .attr("x2", 250)
+    .attr("y2", 380)
+    .attr("stroke", "rgb(114,51,85)")
+    .attr("stroke-width", 2);
+
+  var line = svg.append("line")
+    .attr("x1", 250)
+    .attr("y1", 380)
+    .attr("x2", 290)
+    .attr("y2", 380)
+    .attr("stroke", "rgb(114,51,85)")
+    .attr("stroke-width", 2);
+
+  var line = svg.append("line")
+    .attr("x1", 290)
+    .attr("y1", 380)
+    .attr("x2", 290)
+    .attr("y2", 340)
+    .attr("stroke", "rgb(114,51,85)")
+    .attr("stroke-width", 2);
+
+  var line = svg.append("line")
+    .attr("x1", 290)
+    .attr("y1", 340)
+    .attr("x2", 250)
+    .attr("y2", 340)
+    .attr("stroke", "rgb(114,51,85)")
+    .attr("stroke-width", 2);
+
+  //rect for the tree
+  var rect = svg.append("rect")
+    .attr("width", 24)
+    .attr("height", 100)
+    .attr("x", 320)
+    .attr("y", 280)
+    .attr("fill", "rgb(114,51,85)")
+
+
+
+
+  //rect for box
+  var rects = svg.selectAll("circle")
+    .data([340, 380])
+    .enter()
+    .append("rect")
+
+  rects.attr("width", 40)
+    .attr("height", 18)
+    .attr("x", function (d, i) {
+      return d;
+    })
+    .attr("y", 355)
+    .attr("fill", "rgb(249,219,186)")
+    .attr("stroke", "rgb(108,44,81)")
+    .attr("stroke-width", 2);
+
+  var rects = svg.selectAll("circle")
+    .data([340, 380])
+    .enter()
+    .append("rect")
+
+  rects.attr("width", 40)
+    .attr("height", 15)
+    .attr("x", function (d, i) {
+      return d;
+    })
+    .attr("y", 373)
+    .attr("fill", "rgb(241,154,151)")
+    .attr("stroke", "rgb(108,44,81)")
+    .attr("stroke-width", 2);
+
+  //bow for the box
+  svg.append("polygon")
+    .attr("points", "373,355 373,350 380,355")
+    .attr("fill", "rgb(114,51,85)")
+    .attr("stroke")
+
+
+  svg.append("polygon")
+    .attr("points", "387,355 387,350 380,355")
+    .attr("fill", "rgb(114,51,85)")
+    .attr("stroke")
+
+  //tris for the tree
+  svg.append("polygon")
+    .attr("points", "245,280 420,280 332,150")
+    .attr("fill", "rgb(145,222,220)")
+    .attr("stroke","rgb(114,51,85)")
+    .attr("stroke-width",2)
+
+  svg.append("polygon")
+    .attr("points", "260,225 404,225 332,95")
+    .attr("fill", "rgb(169,236,223)")
+    .attr("stroke","rgb(114,51,85)")
+    .attr("stroke-width",2)
+
+  svg.append("polygon")
+    .attr("points", "275,170 389,170 332,40")
+    .attr("fill", "rgb(193,249,227)")
+    .attr("stroke","rgb(114,51,85)")
+    .attr("stroke-width",2)
+
+
+  const ballFactory = (id, x, y, startColor, endColor) => {
+    //for first ball
+    var radialGradient = svg.append("defs")
+      .append("radialGradient")
+      .attr("id", id)
+      .attr("cx", "0.5")
+      .attr("cy", "0.5")
+      .attr("r", "0.6")
+      .attr("fx", "0.25")
+      .attr("fy", "0.25")
+
+    radialGradient.append("stop")
+      .attr("offset", "20%")
+      .attr("stop-opacity", 1)
+      .attr("stop-color", startColor);
+
+    radialGradient.append("stop")
+      .attr("offset", "100%")
+      .attr("stop-color", endColor)
+      .attr("stop-opacity", 1);
+
+    svg.append("circle")
+      .attr("cx", x)
+      .attr("cy", y)
+      .attr("r", 7)
+      .attr("fill", `url(#${id})`);
+  }
+  ballFactory('first', 320, 140, 'rgb(255, 255, 255', 'rgb(249, 219, 186)')
+  ballFactory('second', 360, 190, 'rgb(255, 255, 255', 'rgb(77,169,248)')
+  ballFactory('third', 310, 225, 'rgb(255, 255, 255', 'rgb(241,154,151)')
+  ballFactory('fourth', 375, 265, 'rgb(255, 255, 255', 'rgb(249,219,186)')
+</script>
+</body>
+</html>

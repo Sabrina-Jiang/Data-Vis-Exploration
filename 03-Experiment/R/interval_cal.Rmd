@@ -1,0 +1,36 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Cmd+Shift+Enter*. 
+
+```{r}
+library(ggplot2)
+data = read.table('/Users/sabrinajiang/03-Experiment/python/result_all.csv',sep = ',',header = TRUE)
+head(data)
+```
+
+```{r}
+bar.chart.result = subset(data,Vis == 'BarChart')
+pie.chart.result = subset(data,Vis == 'PieChart')
+tree.chart.result = subset(data,Vis == 'TreeMap')
+bar.err = log(abs(bar.chart.result$TruePercent - bar.chart.result$ReportedPercent)+0.125,2)
+pie.err = log(abs(pie.chart.result$TruePercent - pie.chart.result$ReportedPercent)+0.125,2)
+tree.err = log(abs(tree.chart.result$TruePercent - tree.chart.result$ReportedPercent)+0.125,2)
+bar.err[bar.err == -3] = 0
+pie.err[pie.err == -3] = 0
+tree.err[tree.err == -3] = 0
+t.test(bar.err)
+t.test(pie.err)
+t.test(tree.err)
+
+
+
+```
+
+Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Cmd+Option+I*.
+
+When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Cmd+Shift+K* to preview the HTML file).

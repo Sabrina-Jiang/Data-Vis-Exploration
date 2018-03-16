@@ -1,0 +1,22 @@
+---
+title: "vis-carsample"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+```{r cars}
+library(ggplot2)
+data = read.table('cars-sample.csv',sep = ',',header = TRUE)
+```
+## Including Plots
+
+```{r pressure, echo=FALSE}
+p1 = ggplot(data,aes(x=data$Weight,y=data$MPG)) + geom_point(aes(color = Manufacturer, size = Weight), alpha = 0.5) +xlab('Weight')+ylab('MPG')
+p1
+```
+
+

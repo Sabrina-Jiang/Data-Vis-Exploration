@@ -1,0 +1,87 @@
+<div>
+    <div class="content">
+        <h2>Instructions / Training Page</h2>
+        <p>What do you think the percent of the smaller value to the larger value?</p>
+        <p>Please put your answer below.</p>
+        <p>e.g. Result = value(smaller one) / value(larger one)</p>
+        <p class="example">And the result is </p>
+        <p>So you can input that and click "next", then start the experiment.</p>
+        <div class="actions">
+            <input type="text" class="value-input">
+            <input type="button" class="next-btn" value="next">
+        </div>
+
+    </div>
+</div>
+
+<script type="text/javascript">
+  (function () {
+    const N = 10
+    let data = []
+    let width = 300,
+      height = 300
+
+    // For loop for generating random values b/w 0 and 100
+    for (let i = 0; i < N; i++)
+      data.push(Math.floor(Math.random() * 90) + 10)
+
+    // Selection for adding the svg
+    let chart = d3.select('.content')
+      .append('svg')
+      .attr('width', width)
+      .attr('height', height)
+
+    // Set the bar width and the scale
+    let barWidth = width / N
+    let yScale = d3.scale.linear()
+      .domain([0, 100])
+      .range([0, height])
+
+    // Adding the bars
+    let rect = chart.selectAll('rect')
+      .data(data)
+      .enter()
+      .append('rect')
+      .attr('fill', 'white')
+      .attr('stroke', 'black')
+      .attr('x', (d, i) => i * barWidth)
+      .attr('y', (d) => height - yScale(d))
+      .attr('height', (d) => yScale(d))
+      .attr('width', barWidth - 5)
+
+    // Add two random points
+    let pattern = []
+    for (let i = 0; i < N - 2; i++) pattern.push(0)
+    pattern.push(Math.ceil(Math.random()))
+    pattern.push(Math.ceil(Math.random()))
+
+//    pattern = shuffle(pattern)
+
+    // Add the points on the bar graph
+    const RADIUS = 3
+    chart.selectAll('circle')
+      .data(data)
+      .enter()
+      .append('circle')
+      .attr('cx', (d, i) => i * barWidth + barWidth / 2 - RADIUS)
+      .attr('cy', (d) => height - yScale(d) + 15)
+      .attr('fill', 'black')
+      .attr('r', RADIUS)
+      .attr('display', (d, i) => !!pattern[i] ? '' : 'none')
+
+    let rawData = data
+      .filter((v, i) => !!pattern[i])
+      .map((i) => i - 10)
+
+    let rightAnswer = parseInt(Math.min(...rawData) / Math.max(...rawData) * 100)
+
+    let example = d3.select('.example')
+      .append('text')
+      .text(rightAnswer)
+
+    $('.next-btn').click(() => {
+
+      loadNextPage()
+    })
+  })()
+</script>
